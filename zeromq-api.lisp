@@ -156,7 +156,7 @@ The string must be freed with FOREIGN-STRING-FREE."
     (%getsockopt socket option opt len)
     (mem-aref opt :int64)))
 
-(defun poll (items &key (timeout -1) retry)
+(defun poll (items &key (timeout -1))
   (let ((len (length items)))
     (with-foreign-object (%items 'pollitem len)
       (dotimes (i len)
@@ -178,7 +178,7 @@ The string must be freed with FOREIGN-STRING-FREE."
                                                     'revents)
                    collect (setf (pollitem-revents (nth i items)) revent))))
              (t (let ((errno (errno)))
-                  (if (and retry (= errno iolib.syscalls:eintr))
+                  (if (and *retry-syscalls* (= errno iolib.syscalls:eintr))
                       (go retry)
                       (error (convert-from-foreign (%strerror errno) :string)))))))))))
 

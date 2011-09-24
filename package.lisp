@@ -55,7 +55,7 @@
    #:vsm
    #:xrep
    #:xreq
-
+   #:*retry-syscalls* ;; set this to nil to raise error on interrupts.
    #:events
 
    ;; structures
